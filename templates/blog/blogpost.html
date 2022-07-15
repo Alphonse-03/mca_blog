@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}bpabout{% endblock %}
+{% block body %}
+{% load extras %}
+<div class="container">
+    
+    <div class="card-body d-flex flex-column align-items-start">
+
+        <strong class="d-inline-block mb-2 text-success">{{blog.author}}</strong>
+        <h3 class="mb-0">
+            <div class="row">{{blog.title}} &nbsp; <div class="views" style="
+                margin-top: 10px;"><h6>views({{blog.view}})</h6></div> </div>
+        </h3>
+        <div class="mb-1 text-muted"><span class="badge badge-secondary my-1">{{blog.timeStamp}}</span></div>
+        
+        <p class="card-text mb-auto">{{blog.content }}</p>
+
+
+    </div>
+</div>
+
+<div class="container">
+    <p>Comments:-</p>
+    {% if user.is_authenticated %}
+    <div class="container">
+        <form action="/blog/comments" method="POST">
+            {% csrf_token %}
+       
+            <label for="text">Your comment</label>
+            <input type="text" name="comment" class="form-control" id="text">
+            <input type="hidden" name="postno" value="{{blog.sno}}">
+            <input type="hidden" name="parentsno" value="">
+            <input class="btn btn-outline-success my-2" type="submit" value="submit">
+        </form>
+    </div>
+    {% else %}
+    <p>Please Login To Comment</p>
+{% endif %}
+
+
+    {% for comment in comments %}
+   
+    <div class="row my-4 ">
+        <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-1  "><img src="{% static 'img/default.jpg' %}" alt="user"
+                width="40px"></div>
+        <div class="col col-lg-11 col-md-11 col-sm-11 col-xs-11">
+            about:&nbsp;<span class="badge badge-secondary">{{comment.timeStamp | naturaltime }}</span><br>by:{{comment.user.username}}
+               <br><br> {{comment.comment}}</div>
+    </div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#reply{{comment.sno}}"
+        aria-expanded="false" aria-controls="reply{{comment.sno}}">
+        reply
+    </button>
+    <div class="collapse" id="reply{{comment.sno}}">
+        <div class="card card-body">
+            {% if user.is_authenticated %}
+            <div class="row m">
+                <form action="/blog/comments" method="POST">
+                    {% csrf_token %}
+                    <label for="text">Your reply</label>
+                    <input type="text" name="comment" class="form-control" id="text">   
+                    <input type="hidden" name="postno" value="{{blog.sno}}">
+                    <input type="hidden" name="parentsno" value="{{comment.sno}}">
+                  
+                    <input class="btn btn-outline-success my-2" type="submit" value="submit">
+                    
+                </form>
+            </div>
+            {% else %}
+                <p>Please Login To Reply</p>
+            {% endif %}
+                {% for reply in replys|get_val:comment.sno %}
+                <div class="row my-4 ">
+                    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-1  "><img src="{% static 'img/default.jpg' %}" alt="user"
+                            width="40px"></div>
+                    <div class="col col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                        about:&nbsp;<span class="badge badge-secondary">{{reply.timeStamp | naturaltime }}</span><br> by:{{reply.user.username}}<br><br>
+                            {{reply.comment}}</div>
+                </div>
+                {% endfor %}
+                
+            
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

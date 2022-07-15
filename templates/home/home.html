@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}home{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to CrabbyCoder!</h1>
+    <p class="lead">This is a Coding Related Blog which is being run by Alphonse Prakash. This blog is regularly updated with new informations of latest technologies so bookmark this page to never miss a new update</p>
+    <hr class="my-4">
+    <p>Lets start this mesmerizing jouney.Just click on get stated to know more about something that is going to be our future.</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="{% url 'blog' %}" role="button">Get Started</a>
+    </p>
+</div>
+<div class="container">
+    <h2>Popular Blogs</h2>
+    <div class="card-body d-flex flex-column align-items-start">
+        <strong class="d-inline-block mb-2 text-primary">{{popular.author}}</strong>
+        <h3 class="mb-0">
+            <a class="text-dark" href="blog/{{popular.slug}}">{{popular.title}}</a>
+        </h3>
+        <div class="mb-1 text-muted">{{popular.timeStamp}}</div>
+        <p class="card-text mb-auto">{{popular.content | truncatechars:300}}</p>
+        <a href="blog/{{popular.slug}}">Continue reading</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,1 @@
+web: gunicorn CrabbyCoder.wsgi --log-file -
