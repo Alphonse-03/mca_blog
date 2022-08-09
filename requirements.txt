@@ -17,3 +17,4 @@ shellescape==3.8.1
 sqlparse==0.3.1
 urllib3==1.25.10
 whitenoise==5.1.0
+dj-database-url==1.0.0
